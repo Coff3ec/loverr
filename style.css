@@ -1,0 +1,532 @@
+/* ==========================================
+   RESET & BASE
+========================================== */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+    --noir:   #1a0a12;
+    --deep:   #2e0f1e;
+    --wine:   #5c1a34;
+    --rose:   #9b3a5c;
+    --blush:  #d4889e;
+    --petal:  #f2c4ce;
+    --cream:  #fdf4f0;
+    --white:  #ffffff;
+    --ff-d: 'Playfair Display', Georgia, serif;
+    --ff-b: 'DM Sans', system-ui, sans-serif;
+    --ff-s: 'Dancing Script', cursive;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    background: var(--noir);
+    color: var(--cream);
+    font-family: var(--ff-b);
+    font-weight: 300;
+    overflow: hidden;
+    height: 100dvh;
+    width: 100vw;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(180deg, #1a0a12 0%, #2e0f1e 40%, #5c1a34 75%, #9b3a5c 100%);
+    z-index: -1;
+}
+
+/* ==========================================
+   CANVAS & HEART RAIN
+========================================== */
+#petalCanvas {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0;
+}
+
+#heartRain {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 10;
+    overflow: hidden;
+}
+
+/* Setiap ♡ yang jatuh — animasi lewat JS inline style */
+.h-drop {
+    position: absolute;
+    pointer-events: none;
+    user-select: none;
+    line-height: 1;
+    will-change: transform, opacity;
+    text-shadow: 0 0 10px currentColor;
+}
+
+/* ==========================================
+   PAGE SYSTEM
+========================================== */
+.page {
+    position: fixed; inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+        opacity  0.85s cubic-bezier(0.4,0,0.2,1),
+        transform 0.85s cubic-bezier(0.4,0,0.2,1);
+    transform: translateY(36px);
+    z-index: 1;
+    padding: 20px;
+    overflow: hidden;
+}
+.page.active  { opacity:1; pointer-events:auto; transform:translateY(0); }
+.page.exit-up { opacity:0; transform:translateY(-48px); }
+
+.page-inner {
+    width: min(700px,100%);
+    z-index: 2;
+}
+.page-inner.centered {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+}
+
+/* ==========================================
+   NAV DOTS
+========================================== */
+.page-nav {
+    position: fixed; right: 22px; top: 50%;
+    transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 11px;
+    z-index: 100;
+    opacity: 0; transition: opacity 0.5s;
+}
+.page-nav.visible { opacity: 1; }
+
+.nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(244,196,206,0.55);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s;
+    padding: 0;
+}
+.nav-dot.active {
+    background: var(--petal);
+    border-color: var(--petal);
+    transform: scale(1.4);
+}
+.nav-dot:hover { border-color: var(--petal); background: rgba(244,196,206,0.2); }
+
+/* ==========================================
+   TYPOGRAPHY
+========================================== */
+.chapter-label {
+    font-family: var(--ff-s);
+    font-size: 1rem;
+    color: var(--blush);
+    letter-spacing: 2px;
+    opacity: 0.8;
+    display: block;
+    margin-bottom: 6px;
+}
+.page-title {
+    font-family: var(--ff-d);
+    font-size: clamp(1.9rem,5vw,3rem);
+    font-weight: 500;
+    color: var(--white);
+    line-height: 1.25;
+    margin-bottom: 6px;
+}
+.page-title.italic { font-style: italic; }
+
+.page-sub {
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--blush);
+    opacity: 0.8;
+}
+
+/* ==========================================
+   PAGE 0 — OPENING
+========================================== */
+.opening-scene {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 30px;
+    text-align: center; z-index: 2;
+}
+.eyebrow {
+    letter-spacing: 4px; text-transform: uppercase;
+    font-size: 0.72rem; color: var(--petal); opacity: 0.7;
+}
+.open-sub { font-size: 0.78rem; color: var(--blush); opacity: 0.5; letter-spacing: 2px; }
+
+.envelope-wrap { display:flex; flex-direction:column; align-items:center; gap:16px; }
+.float-hint {
+    font-size: 0.78rem; color: var(--petal);
+    opacity: 0.7; letter-spacing: 2px;
+    animation: floatHint 2.2s ease-in-out infinite;
+}
+
+.envelope {
+    width: 280px; height: 190px;
+    position: relative; cursor: pointer;
+    filter: drop-shadow(0 18px 55px rgba(155,58,92,.35));
+    transition: transform .4s ease, filter .4s ease;
+}
+.envelope:hover { transform: translateY(-10px) scale(1.02); filter: drop-shadow(0 28px 75px rgba(155,58,92,.55)); }
+
+.env-back  { position:absolute; inset:0; background:linear-gradient(160deg,#b8697f,#8a3a56); border-radius:8px; }
+.env-bottom{ position:absolute; bottom:0;left:0;right:0; height:55%; background:linear-gradient(180deg,#9b3a5c,#7a2d48); clip-path:polygon(0 100%,50% 0%,100% 100%); border-radius:0 0 8px 8px; }
+.env-left  { position:absolute; top:0;left:0; width:50%;height:100%; background:#c47a90; clip-path:polygon(0 0,0 100%,100% 50%); border-radius:8px 0 0 8px; }
+.env-right { position:absolute; top:0;right:0; width:50%;height:100%; background:#b06070; clip-path:polygon(100% 0,0 50%,100% 100%); border-radius:0 8px 8px 0; }
+.env-flap  {
+    position:absolute; top:0;left:0;right:0; height:55%;
+    background:linear-gradient(180deg,#e8aab8,#c47a90);
+    clip-path:polygon(0 0,50% 60%,100% 0);
+    transform-origin:top center;
+    transition:transform .8s cubic-bezier(.4,0,.2,1);
+    border-radius:8px 8px 0 0; z-index:3;
+}
+.envelope.open .env-flap { transform:rotateX(-180deg); }
+
+.env-letter {
+    position:absolute; inset:18px;
+    background:var(--cream); border-radius:5px;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--rose); font-size:2rem; z-index:2;
+    transition:transform .6s .3s cubic-bezier(.34,1.56,.64,1);
+}
+.envelope.open .env-letter { transform:translateY(-72px); }
+
+/* ==========================================
+   PAGE 1 — TYPEWRITER INTRO
+========================================== */
+.typewriter-box {
+    max-width: 540px;
+    font-size: 1.05rem;
+    line-height: 2.1;
+    color: var(--petal);
+    text-align: center;
+    min-height: 200px;
+}
+.typewriter { display:inline; white-space:pre-wrap; }
+.cursor { display:inline-block; color:var(--blush); font-weight:300; animation:blink 1s step-end infinite; }
+
+/* ==========================================
+   PAGE 3 — SONG
+========================================== */
+.youtube-wrap {
+    width: 100%; max-width: 620px;
+    border-radius: 18px; overflow: hidden;
+    background: rgba(255,255,255,.05);
+    padding: 8px;
+    border: 1px solid rgba(244,196,206,.12);
+    box-shadow: 0 22px 70px rgba(155,58,92,.25);
+}
+.youtube-wrap iframe { width:100%; height:330px; border:none; border-radius:12px; display:block; }
+
+/* ==========================================
+   PAGE 4 — LETTER (full-height flex column)
+========================================== */
+.page4-inner {
+    display: flex;
+    flex-direction: column;
+    width: min(700px,100%);
+    height: 100dvh;
+    max-height: 100dvh;
+    padding: 28px 20px 18px;
+    box-sizing: border-box;
+    gap: 0;
+    z-index: 2;
+}
+
+.page4-top { flex: 0 0 auto; margin-bottom: 12px; }
+
+/* Scrollable letter area — satu-satunya scroll di page 4 */
+.letter-scroll {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding-right: 4px;
+    margin-bottom: 12px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(244,196,206,.22) transparent;
+}
+.letter-scroll::-webkit-scrollbar { width: 3px; }
+.letter-scroll::-webkit-scrollbar-track { background: transparent; }
+.letter-scroll::-webkit-scrollbar-thumb { background:rgba(244,196,206,.22); border-radius:2px; }
+
+.page4-bottom { flex:0 0 auto; display:flex; justify-content:flex-end; }
+
+/* PAPER STACK */
+.paper-stack { position:relative; padding-bottom:12px; }
+
+.paper-sheet {
+    position: absolute;
+    left: 0; right: 0;
+    border-radius: 22px;
+    background: rgba(253,244,240,.055);
+    border: 1px solid rgba(244,196,206,.10);
+}
+.paper-back1 { top:6px; bottom:-6px; left:6px; right:-6px; transform:rotate(1.1deg); opacity:.65; }
+.paper-back2 { top:11px; bottom:-11px; left:10px; right:-10px; transform:rotate(2.2deg); opacity:.38; }
+
+/* LETTER PAPER (kertas utama) */
+.letter-paper {
+    position: relative; z-index: 2;
+    border: 1px solid rgba(244,196,206,.18);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 38px 36px;
+    border-radius: 22px;
+    line-height: 2;
+    color: var(--petal);
+    font-size: 0.96rem;
+    /* Efek kertas: base + ruled lines */
+    background-image:
+        linear-gradient(170deg, rgba(253,244,240,.09) 0%, rgba(253,244,240,.05) 100%),
+        repeating-linear-gradient(
+            transparent,
+            transparent 31px,
+            rgba(244,196,206,.055) 31px,
+            rgba(244,196,206,.055) 32px
+        );
+    box-shadow:
+        0 6px 32px rgba(0,0,0,.18),
+        inset 0 1px 0 rgba(255,255,255,.07);
+}
+
+.letter-paper p {
+    margin-bottom: 12px;
+    min-height: 1.4em;
+}
+
+.letter-paper em { font-family:var(--ff-d); font-style:italic; color:var(--white); }
+
+.letter-salutation { font-family:var(--ff-d); font-size:1.2rem; color:var(--white); margin-bottom:22px !important; }
+
+.letter-divider {
+    text-align: center;
+    color: var(--blush);
+    opacity: 0.45;
+    margin: 18px 0 !important;
+    font-size: 1rem;
+}
+
+.signature {
+    font-family: var(--ff-s);
+    font-size: 1.45rem;
+    color: var(--petal);
+    text-align: right;
+    margin-top: 26px !important;
+    margin-bottom: 0 !important;
+}
+
+
+
+/* ==========================================
+   PAGE 5 — ENDING
+========================================== */
+.ending-scene { gap:30px; }
+.ending-pre { font-size:1.2rem; color:var(--petal); letter-spacing:2px; }
+
+.final-btn {
+    background: linear-gradient(135deg, var(--petal), var(--blush));
+    color: var(--deep); border:none;
+    padding: 15px 40px; border-radius:999px;
+    font-family:var(--ff-b); font-size:1rem; font-weight:500;
+    cursor:pointer; letter-spacing:1px;
+    transition: transform .3s ease, box-shadow .3s ease;
+    box-shadow: 0 8px 32px rgba(212,136,158,.3);
+}
+.final-btn:hover { transform:scale(1.06); box-shadow:0 12px 48px rgba(212,136,158,.5); }
+
+.heart-reveal { display:none; flex-direction:column; align-items:center; gap:24px; }
+.big-heart {
+    width:120px; height:120px; fill:#ff6b8e;
+    filter:drop-shadow(0 0 28px rgba(255,107,142,.6));
+    opacity:0; transform:scale(.2);
+}
+.big-heart.animate { animation:heartBeat 2s cubic-bezier(.34,1.56,.64,1) forwards; }
+.big-heart.pulse   { animation:heartPulse 1.6s ease-in-out infinite; }
+
+.heart-sign {
+    font-family:var(--ff-s); font-size:1.5rem;
+    color:var(--petal); opacity:0; line-height:1.6;
+}
+.heart-sign.fade-in { animation:fadeUp 1s ease forwards; }
+
+/* ==========================================
+   NEXT BUTTON
+========================================== */
+.next-btn {
+    background: transparent;
+    border: 1px solid rgba(244,196,206,.35);
+    color: var(--petal);
+    padding: 12px 30px; border-radius:999px;
+    font-family:var(--ff-b); font-size:0.88rem;
+    letter-spacing:2px; cursor:pointer;
+    transition: all .35s ease;
+    margin-top: 14px; display:block;
+}
+.next-btn:hover {
+    background: rgba(244,196,206,.1);
+    border-color: var(--petal); color:var(--white);
+    transform: translateX(4px);
+}
+
+/* ==========================================
+   POPUP
+========================================== */
+.overlay {
+    position:fixed; inset:0;
+    background:rgba(10,3,8,.72);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+    display:none; align-items:center; justify-content:center;
+    z-index:999;
+}
+.overlay.show { display:flex; animation:fadeIn .3s ease; }
+
+.popup {
+    width:min(360px,90%);
+    background:linear-gradient(160deg,rgba(244,196,206,.12),rgba(244,196,206,.06));
+    border:1px solid rgba(244,196,206,.25);
+    backdrop-filter:blur(30px);
+    -webkit-backdrop-filter:blur(30px);
+    padding:38px 34px; border-radius:26px;
+    text-align:center; color:var(--cream);
+    box-shadow:0 40px 100px rgba(0,0,0,.4);
+    animation:popIn .5s cubic-bezier(.34,1.56,.64,1);
+}
+.popup-deco { font-size:1.75rem; margin-bottom:18px; color:var(--blush); }
+.popup p { line-height:1.9; margin-bottom:26px; font-size:1rem; color:var(--petal); }
+.popup-btn {
+    background:linear-gradient(135deg,#d4889e,#a85070);
+    border:none; color:white;
+    padding:12px 30px; border-radius:999px;
+    font-family:var(--ff-b); font-size:0.93rem;
+    cursor:pointer; transition:transform .3s, box-shadow .3s;
+    box-shadow:0 6px 22px rgba(168,80,112,.35);
+}
+.popup-btn:hover { transform:scale(1.04); box-shadow:0 10px 34px rgba(168,80,112,.5); }
+
+/* ==========================================
+   MINI MSG
+========================================== */
+.mini-msg {
+    position:fixed; right:46px; bottom:30px;
+    padding:9px 18px;
+    background:rgba(244,196,206,.1);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    border:1px solid rgba(244,196,206,.18);
+    border-radius:999px;
+    font-size:0.8rem; color:var(--petal);
+    z-index:90; opacity:0;
+    transition:opacity .5s ease;
+    pointer-events:none; letter-spacing:.5px;
+}
+
+/* ==========================================
+   KEYFRAMES
+========================================== */
+@keyframes floatHint {
+    0%,100% { transform:translateY(0); opacity:.7; }
+    50%      { transform:translateY(-8px); opacity:1; }
+}
+@keyframes blink {
+    0%,100% { opacity:1; }
+    50%      { opacity:0; }
+}
+@keyframes heartBeat {
+    0%   { transform:scale(.2); opacity:0; }
+    60%  { transform:scale(1.12); opacity:1; }
+    100% { transform:scale(1); opacity:1; }
+}
+@keyframes heartPulse {
+    0%,100% { transform:scale(1); }
+    50%      { transform:scale(1.12); filter:drop-shadow(0 0 40px rgba(255,107,142,.8)); }
+}
+@keyframes fadeUp {
+    from { opacity:0; transform:translateY(14px); }
+    to   { opacity:1; transform:translateY(0); }
+}
+@keyframes fadeIn {
+    from { opacity:0; } to { opacity:1; }
+}
+@keyframes popIn {
+    from { opacity:0; transform:scale(.86) translateY(18px); }
+    to   { opacity:1; transform:scale(1) translateY(0); }
+}
+
+/* ♡ fall — pakai translate inline dari JS (tidak pakai var CSS) */
+@keyframes hFall {
+    0%   { opacity:0;   transform:translate(0,0) rotate(-8deg) scale(.55); }
+    8%   { opacity:1; }
+    85%  { opacity:.65; }
+    100% { opacity:0;   transform:translate(var(--tx,50px),110vh) rotate(22deg) scale(1.05); }
+}
+
+/* ==========================================
+   MOBILE
+========================================== */
+@media (max-width:640px) {
+    .page-nav { right:10px; }
+    .page-title { font-size:clamp(1.55rem,7vw,2.3rem); }
+    .cards-grid { grid-template-columns:1fr; }
+    .card-wide  { grid-column:span 1; }
+    .youtube-wrap iframe { height:200px; }
+    .letter-paper { padding:24px 18px; }
+    .envelope { width:230px; height:158px; }
+    .mini-msg { right:14px; bottom:18px; }
+    .paper-back1 { left:4px; right:-4px; }
+    .paper-back2 { left:7px; right:-7px; }
+}
+
+@media (prefers-reduced-motion:reduce) {
+    *,*::before,*::after {
+        animation-duration:.01ms !important;
+        transition-duration:.01ms !important;
+    }
+}
+
+.heart{
+
+    position:fixed;
+
+    color:var(--pink);
+
+    pointer-events:none;
+
+    animation:heartFloat 4s linear forwards;
+}
+
+@keyframes heartFloat{
+
+    from{
+
+        transform:
+        translateY(0)
+        scale(1);
+
+        opacity:1;
+    }
+
+    to{
+
+        transform:
+        translateY(-300px)
+        scale(1.6);
+
+        opacity:0;
+    }
+}
