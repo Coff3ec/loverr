@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Matthew ♡</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <canvas id="petalCanvas"></canvas>
+    <div id="heartRain"></div>
+
+    <nav class="page-nav" id="pageNav">
+        <button class="nav-dot active" data-page="0"></button>
+        <button class="nav-dot" data-page="1"></button>
+        <button class="nav-dot" data-page="2"></button>
+        <button class="nav-dot" data-page="3"></button>
+        <button class="nav-dot" data-page="4"></button>
+        <button class="nav-dot" data-page="5"></button>
+    </nav>
+
+    <div class="mini-msg" id="miniMsg"></div>
+
+    <!-- PAGE 0 — OPENING -->
+    <div class="page active" id="page-0">
+        <div class="opening-scene">
+            <p class="eyebrow">a letter for Matthew.</p>
+            <div class="envelope-wrap">
+                <div class="float-hint">↓ click to open ↓</div>
+                <div class="envelope" id="envelope">
+                    <div class="env-back"></div>
+                    <div class="env-left"></div>
+                    <div class="env-right"></div>
+                    <div class="env-bottom"></div>
+                    <div class="env-flap"></div>
+                    <div class="env-letter">♡</div>
+                </div>
+            </div>
+            <p class="open-sub">made with love, for you.</p>
+        </div>
+    </div>
+
+    <!-- PAGE 1 — TYPEWRITER INTRO (BUTTON ONLY) -->
+    <div class="page" id="page-1">
+        <div class="page-inner centered">
+            <span class="chapter-label">I.</span>
+            <h2 class="page-title">Dear Matthew,</h2>
+            <div class="typewriter-box">
+                <div class="typewriter" id="typewriter"></div>
+                <span class="cursor" id="cursor">|</span>
+            </div>
+            <button class="next-btn" id="nextFromLetter" style="opacity:0;pointer-events:none;">
+                continue →
+            </button>
+        </div>
+    </div>
+
+    <!-- PAGE 3 — SONG -->
+    <div class="page" id="page-3">
+        <div class="page-inner centered">
+            <span class="chapter-label">II.</span>
+            <h2 class="page-title italic">if you were a song,<br>maybe it'd be this one.</h2>
+            <p class="page-sub">listen carefully.</p>
+            <div class="youtube-wrap">
+                <iframe
+                    src="https://www.youtube.com/embed/54kTO17-j_0"
+                    title="Song For Matthew"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+            <button class="next-btn" id="nextFromSong">continue →</button>
+        </div>
+    </div>
+
+    <!-- PAGE 4 — MAIN LETTER (BUTTON ONLY, letter typewriter) -->
+    <div class="page" id="page-4">
+        <div class="page4-inner">
+            <div class="page4-top">
+                <span class="chapter-label">III.</span>
+                <h2 class="page-title">A Place</h2>
+            </div>
+
+            <!-- letter-scroll adalah satu-satunya area scroll di page ini -->
+            <div class="letter-scroll" id="letterScroll">
+                <div class="paper-stack">
+                    <div class="paper-sheet paper-back2"></div>
+                    <div class="paper-sheet paper-back1"></div>
+                    <div class="letter-paper" id="letterPaper">
+
+                        <p class="letter-salutation">Matthew,</p>
+
+                        <p>People often think affection is about wanting more time.</p>
+                        <p>More conversations.</p>
+                        <p>More memories.</p>
+                        <p>But I think it's something else.</p>
+
+                        <div class="letter-divider">✦</div>
+
+                        <p>I think affection is when someone's existence begins to feel like a <em>place.</em></p>
+                        <p>A place you return to after a long day.</p>
+                        <p>A place that feels familiar.</p>
+                        <p>A place that asks for nothing, yet somehow gives comfort anyway.</p>
+
+                        <div class="letter-divider">✦</div>
+
+                        <p>And somehow,</p>
+                        <p>you've become that place for me.</p>
+                        <p>Not because you tried to.</p>
+                        <p>Not because I asked you to.</p>
+                        <p>But because being around you has always felt a little softer than being anywhere else.</p>
+
+                        <div class="letter-divider">✦</div>
+
+                        <p>In a world that never seems to slow down,</p>
+                        <p>you became one of the few things that feels easy.</p>
+                        <p>Something I don't have to force.</p>
+                        <p>Something I don't have to question.</p>
+                        <p>Just something that quietly makes my days better.</p>
+
+                        <div class="letter-divider">✦</div>
+
+                        <p>Maybe that's why I keep finding reasons to stay.</p>
+                        <p>And maybe that's why, whenever I think of comfort,</p>
+                        <p>I end up thinking of you.</p>
+
+                        <p class="signature">— Lune</p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="page4-bottom">
+                <button class="next-btn" id="nextFromMainLetter" style="opacity:0;pointer-events:none;">
+                    one last thing →
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- PAGE 5 — ENDING -->
+    <div class="page" id="page-5">
+        <div class="page-inner centered ending-scene">
+            <p class="ending-pre">one last thing.</p>
+            <button class="final-btn" id="finalBtn">click ♡</button>
+            <div class="heart-reveal" id="heartReveal">
+                <svg class="big-heart" id="bigHeart" viewBox="0 0 512 512">
+                    <path d="M256 464s-16-14-36-31c-83-71-156-132-156-224 0-62 48-113 108-113 34 0 66 16 84 42 18-26 50-42 84-42 60 0 108 51 108 113 0 92-73 153-156 224-20 17-36 31-36 31z"/>
+                </svg>
+                <p class="heart-sign">made with love,<br>— Lune</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- POPUPS -->
+    <div class="overlay" id="popup1">
+        <div class="popup">
+            <div class="popup-deco">✦</div>
+            <p>hey.<br><br>don't scroll too fast.</p>
+            <button class="popup-btn close-popup">okay ♡</button>
+        </div>
+    </div>
+
+    <div class="overlay" id="popup2">
+        <div class="popup">
+            <div class="popup-deco">♪</div>
+            <p>did you understand<br>why i chose this song?</p>
+            <button class="popup-btn close-popup">maybe.</button>
+        </div>
+    </div>
+
+    <div class="overlay" id="popup3">
+        <div class="popup">
+            <div class="popup-deco">♡</div>
+            <p>if i had to choose again,<br><br>i'd still choose you.</p>
+            <button class="popup-btn" id="showHeartBtn">♡</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
