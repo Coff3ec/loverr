@@ -59,6 +59,56 @@
         </div>
     </div>
 
+    <!-- PAGE 2 — MINI GAME -->
+    <div class="page" id="page-2">
+        <div class="page-inner centered game-page-inner">
+            <span class="chapter-label">III.</span>
+            <h2 class="page-title">catch my heart.</h2>
+            <p class="page-sub game-hint-text">move your cursor (or finger) to catch the falling hearts ♡</p>
+
+            <div class="game-wrap" id="gameWrap">
+                <div class="game-stats">
+                    <div class="game-stat-block">
+                        <span class="game-stat-label">caught</span>
+                        <span class="game-stat-val" id="gScore">0</span>
+                    </div>
+                    <div class="game-lives" id="gameLives">
+                        <span class="life-heart">♡</span>
+                        <span class="life-heart">♡</span>
+                        <span class="life-heart">♡</span>
+                    </div>
+                    <div class="game-stat-block">
+                        <span class="game-stat-label">missed</span>
+                        <span class="game-stat-val" id="gMissed">0</span>
+                    </div>
+                </div>
+
+                <div class="game-field" id="gameField">
+                    <canvas id="gameCanvas"></canvas>
+                    <!-- catcher element -->
+                    <div class="catcher" id="catcher">
+                        <div class="catcher-inner">
+                            <span class="catcher-emoji">🤍</span>
+                        </div>
+                    </div>
+                    <!-- overlay states -->
+                    <div class="game-overlay" id="gameOverlay">
+                        <div class="game-overlay-box">
+                            <p class="game-overlay-title" id="overlayTitle">ready?</p>
+                            <p class="game-overlay-sub" id="overlaySub">catch as many hearts as you can.<br>don't let too many fall.</p>
+                            <button class="popup-btn" id="startGameBtn">start ♡</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="next-btn" id="nextFromGame" style="opacity:0;pointer-events:none;">
+                continue →
+            </button>
+        </div>
+    </div>
+
+
     <!-- PAGE 3 — SONG -->
     <div class="page" id="page-3">
         <div class="page-inner centered">
@@ -67,7 +117,7 @@
             <p class="page-sub">listen carefully.</p>
             <div class="youtube-wrap">
                 <iframe
-                    src="https://www.youtube.com/embed/54kTO17-j_0"
+                    src="https://www.youtube.com/embed/q5mKeI6aprc"
                     title="Song For Matthew"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen>
@@ -92,41 +142,39 @@
                     <div class="paper-sheet paper-back1"></div>
                     <div class="letter-paper" id="letterPaper">
 
-                        <p class="letter-salutation">Matthew,</p>
+                        <p class="letter-salutation">For u kaa,</p>
 
-                        <p>People often think affection is about wanting more time.</p>
-                        <p>More conversations.</p>
-                        <p>More memories.</p>
-                        <p>But I think it's something else.</p>
+                        <p>Aku gatau harus mulai dari mana, mungkin dari ini aja.</p>
+                        <p>Aku sayang sama kamu kaa</p>
+                        <p>Lebih dari yang mungkin seharusnya</p>
+                        <p>Dan jujur, aku takut.</p>
 
-                        <div class="letter-divider">✦</div>
 
-                        <p>I think affection is when someone's existence begins to feel like a <em>place.</em></p>
-                        <p>A place you return to after a long day.</p>
-                        <p>A place that feels familiar.</p>
-                        <p>A place that asks for nothing, yet somehow gives comfort anyway.</p>
+                        <p>Takut karena aku ngga pernah nyangka bakal ada seseorang yang bisa sepenting ini buat aku.</p>
+                        <p>Sebelum ketemu kamu, semuanya terasa biasa aja.</p>
+                        <p>Lalu kamu hadir dalam hidup aku.</p>
+                        <p>Dan entah gimana, pelan-pelan kamu jadi orang pertama yang pengen aku kasih tahu.</p>
 
-                        <div class="letter-divider">✦</div>
 
-                        <p>And somehow,</p>
-                        <p>you've become that place for me.</p>
-                        <p>Not because you tried to.</p>
-                        <p>Not because I asked you to.</p>
-                        <p>But because being around you has always felt a little softer than being anywhere else.</p>
+                        <p>Kalau aku lagi seneng, aku pengen kasih tau kamu.</p>
+                        <p>Kalau aku lagi sedih, aku juga nyari kamu. Aneh ya?</p>
+                        <p>Makasih udah hadir jadi bagian dari hidup aku kaa.</p>
+                        <p>Aku gatau cara ngungkapin semuanya dengan baik.</p>
+                        <p>Jujur aja, aku gabisa.</p>
 
-                        <div class="letter-divider">✦</div>
 
-                        <p>In a world that never seems to slow down,</p>
-                        <p>you became one of the few things that feels easy.</p>
-                        <p>Something I don't have to force.</p>
-                        <p>Something I don't have to question.</p>
-                        <p>Just something that quietly makes my days better.</p>
+                        <p>Kadang aku ngerasa semua kata-kata aku ngga akan cukup buat ngejelasin seberapa berartinya kamu buat aku.</p>
+                        <p>Tapi aku mau kamu tau kalau aku beneran sayang kamu, kaa.</p>
+                        <p>Kamu penting buat aku.</p>
+                        <p>Lebih penting dari yang aku tunjukin.</p>
+                        <p>Lebih penting dari yang aku bilang.</p>
 
-                        <div class="letter-divider">✦</div>
 
-                        <p>Maybe that's why I keep finding reasons to stay.</p>
-                        <p>And maybe that's why, whenever I think of comfort,</p>
-                        <p>I end up thinking of you.</p>
+                        <p>Aku gamau kehilangan kamu.</p>
+                        <p>Kalau boleh, aku berharap kamu disini untuk waktu yang lama.</p>
+                        <p>Maaf alay, aku harap semua kata-kata yang aku tulis, kamu tau seberapa besar rasa sayang aku sama kamu.</p>
+                        
+                       <p><em>i love u moree kaa ♡</em></p>
 
                         <p class="signature">— Lune</p>
 
