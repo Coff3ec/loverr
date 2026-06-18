@@ -219,6 +219,242 @@ body::before {
 .cursor { display:inline-block; color:var(--blush); font-weight:300; animation:blink 1s step-end infinite; }
 
 /* ==========================================
+   PAGE 2 — MINI GAME
+========================================== */
+.game-page-inner {
+    gap: 10px !important;
+    width: min(560px, 100%) !important;
+}
+
+.game-hint-text {
+    letter-spacing: 1.5px !important;
+    font-size: 0.75rem !important;
+    opacity: 0.6;
+    margin-bottom: 4px;
+}
+
+.game-wrap {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Stats row */
+.game-stats {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4px;
+}
+
+.game-stat-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-width: 54px;
+}
+
+.game-stat-label {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--blush);
+    opacity: 0.7;
+}
+
+.game-stat-val {
+    font-family: var(--ff-d);
+    font-size: 1.6rem;
+    color: var(--white);
+    line-height: 1;
+}
+
+.game-lives {
+    display: flex;
+    gap: 7px;
+    align-items: center;
+}
+
+.life-heart {
+    font-size: 1.2rem;
+    color: #ff6b8e;
+    transition: all 0.4s ease;
+    display: inline-block;
+    text-shadow: 0 0 10px rgba(255,107,142,0.5);
+}
+
+.life-heart.lost {
+    color: rgba(255,107,142,0.18);
+    text-shadow: none;
+    transform: scale(0.85);
+}
+
+/* Game field */
+.game-field {
+    position: relative;
+    width: 100%;
+    height: 260px;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(244,196,206,0.14);
+    background:
+        linear-gradient(180deg,
+            rgba(26,10,18,0.7) 0%,
+            rgba(46,15,30,0.6) 60%,
+            rgba(92,26,52,0.5) 100%
+        );
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow:
+        0 8px 40px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+    cursor: none;
+    touch-action: none;
+}
+
+#gameCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* Catcher */
+.catcher {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 56px;
+    height: 56px;
+    pointer-events: none;
+    z-index: 5;
+    transition: left 0.05s linear;
+}
+
+.catcher-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 40% 35%, rgba(244,196,206,0.22), rgba(155,58,92,0.12));
+    border: 1.5px solid rgba(244,196,206,0.3);
+    border-radius: 50%;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow:
+        0 4px 20px rgba(155,58,92,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.catcher.catch-anim .catcher-inner {
+    transform: scale(1.25);
+    box-shadow:
+        0 6px 30px rgba(255,107,142,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.catcher-emoji {
+    font-size: 1.5rem;
+    line-height: 1;
+    transition: all 0.15s ease;
+    display: block;
+}
+
+.catcher.catch-anim .catcher-emoji {
+    transform: scale(1.15);
+}
+
+/* Game overlay */
+.game-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10,3,8,0.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 20;
+    border-radius: 20px;
+    transition: opacity 0.4s ease;
+}
+
+.game-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.game-overlay-box {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1);
+}
+
+.game-overlay-title {
+    font-family: var(--ff-d);
+    font-size: 1.6rem;
+    color: var(--white);
+    font-weight: 500;
+}
+
+.game-overlay-sub {
+    font-size: 0.82rem;
+    color: var(--petal);
+    line-height: 1.7;
+    opacity: 0.85;
+    max-width: 240px;
+}
+
+/* Score flash particle */
+.score-pop {
+    position: absolute;
+    pointer-events: none;
+    font-family: var(--ff-d);
+    font-size: 1.1rem;
+    color: #ffb3c6;
+    font-style: italic;
+    z-index: 15;
+    animation: scorePop 0.8s ease forwards;
+    white-space: nowrap;
+    text-shadow: 0 0 12px rgba(255,107,142,0.7);
+}
+
+.miss-pop {
+    color: rgba(255,107,142,0.55);
+    font-size: 0.9rem;
+}
+
+@keyframes scorePop {
+    0%   { transform: translateY(0) scale(0.7); opacity: 0; }
+    25%  { transform: translateY(-8px) scale(1.1); opacity: 1; }
+    100% { transform: translateY(-36px) scale(0.9); opacity: 0; }
+}
+
+/* Shake on miss */
+@keyframes fieldShake {
+    0%,100% { transform: translateX(0); }
+    20%      { transform: translateX(-5px); }
+    40%      { transform: translateX(5px); }
+    60%      { transform: translateX(-3px); }
+    80%      { transform: translateX(3px); }
+}
+.field-shake { animation: fieldShake 0.38s ease; }
+
+
+
+/* ==========================================
    PAGE 3 — SONG
 ========================================== */
 .youtube-wrap {
@@ -485,48 +721,4 @@ body::before {
     .cards-grid { grid-template-columns:1fr; }
     .card-wide  { grid-column:span 1; }
     .youtube-wrap iframe { height:200px; }
-    .letter-paper { padding:24px 18px; }
-    .envelope { width:230px; height:158px; }
-    .mini-msg { right:14px; bottom:18px; }
-    .paper-back1 { left:4px; right:-4px; }
-    .paper-back2 { left:7px; right:-7px; }
-}
-
-@media (prefers-reduced-motion:reduce) {
-    *,*::before,*::after {
-        animation-duration:.01ms !important;
-        transition-duration:.01ms !important;
-    }
-}
-
-.heart{
-
-    position:fixed;
-
-    color:var(--pink);
-
-    pointer-events:none;
-
-    animation:heartFloat 4s linear forwards;
-}
-
-@keyframes heartFloat{
-
-    from{
-
-        transform:
-        translateY(0)
-        scale(1);
-
-        opacity:1;
-    }
-
-    to{
-
-        transform:
-        translateY(-300px)
-        scale(1.6);
-
-        opacity:0;
-    }
-}
+    .letter-paper
